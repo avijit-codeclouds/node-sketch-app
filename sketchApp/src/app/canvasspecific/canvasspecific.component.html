@@ -1,0 +1,16 @@
+<div class="jumbotron text-center">
+    <p>Click On Draw Button</p>
+    <button class="btn btn-primary"
+      (click)='setSelection("line"); addShape("line"); erase = false'>Draw <i class="fa fa-pencil" aria-hidden="true"></i>
+    </button>
+    <!-- <button class="btn btn-info"
+        (click)='clearSelection(); setSelection("undo"); undo()'>Undo</button> -->
+    <button class="btn btn-danger"
+        (click)='clearSelection(); setSelection("erase"); erase = true'>Erase <i class="fa fa-eraser" aria-hidden="true"></i>
+    </button>
+    <button class="btn btn-success" [disabled]="disableSaveBtn" (click)="saveDraw()">Save <i class="fa fa-floppy-o" aria-hidden="true"></i>
+    </button>
+    <!-- <app-colors></app-colors> -->
+    <app-colors (hexMessageEvent)="receiveMessage($event)"></app-colors>
+    <div id="canvas"></div>
+</div>
