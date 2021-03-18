@@ -9,6 +9,7 @@ import { ColorEvent } from 'ngx-color';
 export class ColorsComponent implements OnInit {
 
   hexMessage: string 
+  makeRGB : string //rgba(255,255,0,1)
 
   @Output() hexMessageEvent = new EventEmitter<any>();
 
@@ -20,7 +21,11 @@ export class ColorsComponent implements OnInit {
   handleChange($event: ColorEvent) {
     console.log($event.color);
     console.log($event.color.hex)
-    this.hexMessage = $event.color.hex
+    console.log($event.color.rgb)
+    let rgb = $event.color.rgb
+    this.makeRGB = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+rgb.a+')'
+    console.log(this.makeRGB)
+    this.hexMessage = this.makeRGB//$event.color.hex
     this.hexMessageEvent.emit(this.hexMessage)
 
     // color = {

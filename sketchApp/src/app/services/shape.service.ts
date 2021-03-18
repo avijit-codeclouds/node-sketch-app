@@ -76,6 +76,7 @@ export class ShapeService {
     return new Konva.Line({
       stroke: color,
       strokeWidth: 5,
+      shadowEnabled : false,
       globalCompositeOperation:
         mode === 'brush' ? 'source-over' : 'destination-out',
       points: [pos.x, pos.y],
