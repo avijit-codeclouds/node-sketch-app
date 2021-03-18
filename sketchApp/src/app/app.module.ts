@@ -22,6 +22,10 @@ import { CanvasnewComponent } from './canvasnew/canvasnew.component';
 import { CanvasspecificComponent } from './canvasspecific/canvasspecific.component';
 import { JwtInterceptor } from './guards/jwt.interceptor'
 
+//fabric
+import { EventHandlerService } from './services/event-handler.service';
+import { FabricService } from './services/fabric.service';
+import { ButtonsComponent } from './buttons/buttons.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +37,8 @@ import { JwtInterceptor } from './guards/jwt.interceptor'
     RegisterComponent,
     KonvastaticComponent,
     CanvasnewComponent,
-    CanvasspecificComponent
+    CanvasspecificComponent,
+    ButtonsComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +52,7 @@ import { JwtInterceptor } from './guards/jwt.interceptor'
     HttpClientModule
   ],
   providers: [
-    ShapeService,
+    ShapeService,EventHandlerService,FabricService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]

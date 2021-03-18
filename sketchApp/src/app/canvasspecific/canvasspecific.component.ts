@@ -14,6 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class CanvasspecificComponent implements OnInit {
 
   canvas_id : any
+  eraserColor : any = '#ffffff'
   getNode : any = ''
 
   hexMessage:string;
@@ -51,8 +52,8 @@ export class CanvasspecificComponent implements OnInit {
       console.log(window.innerWidth)
       console.log(window.innerHeight)
       let json = this.getNode
-      console.log(this.getNode)
-      console.log(json)
+      // console.log(this.getNode)
+      // console.log(json)
       // let width = 1200;
       // let height = 400;
       this.stage = Konva.Node.create(json, 'canvas');
@@ -64,6 +65,7 @@ export class CanvasspecificComponent implements OnInit {
       // });
       this.layer = new Konva.Layer();
       this.stage.add(this.layer);
+      this.stage.container().style.backgroundColor = '#FFFFFF';
       this.color = '#0693E3'
       this.addLineListeners(this.color);
     },
@@ -101,6 +103,7 @@ export class CanvasspecificComponent implements OnInit {
   }
 
   addLineListeners(color : any) {
+    console.log(`color ::: ${color}`)
     const component = this;
     let lastLine;
     let isPaint;
@@ -109,8 +112,8 @@ export class CanvasspecificComponent implements OnInit {
         return;
       }
       isPaint = true;
-      const mode = component.erase ? 'erase' : 'brush';
-      // const mode = 'erase'
+      // const mode = component.erase ? 'erase' : 'brush';
+      const mode = 'brush'
       var pos = component.stage.getPointerPosition();
       lastLine = component.shapeService.line(pos, mode, color)
       component.layer.add(lastLine);
@@ -131,11 +134,12 @@ export class CanvasspecificComponent implements OnInit {
       var newPoints = lastLine.points().concat([pos.x, pos.y]);
       lastLine.points(newPoints);
       component.layer.batchDraw();
+      console.log(component.layer)
       let jsonStage = component.stage.toJSON();
       component.getJsonStage = jsonStage
       component.disableSaveBtn = false
-      console.log(`jsonStage ::`)
-      console.log(jsonStage)
+      // console.log(`jsonStage ::`)
+      // console.log(jsonStage)
     });
   }
 
@@ -150,15 +154,20 @@ export class CanvasspecificComponent implements OnInit {
 
   clearSelection() {
     Object.keys(this.selectedButton).forEach(key => {
-      console.log(this.selectedButton[key])
+      // console.log(this.selectedButton[key])
       this.selectedButton[key] = false;
     })
   }
 
   setSelection(type: string) {
     this.selectedButton[type] = true;
-    console.log(this.selectedButton[type])
+    if(type == 'erase'){
+      this.color = '#ffffff';
+      this.addLineListeners(this.color);
+    }
+    // console.log(type,this.selectedButton[type])
   }
+
   addShape(type: string) {
     this.clearSelection();
     this.setSelection(type);
@@ -170,50 +179,4 @@ export class CanvasspecificComponent implements OnInit {
     this.selectedButton['line'] = true;
   }
   
-  undo() {
-    const removedShape = this.shapes.pop();
-    this.transformers.forEach(t => {
-      t.detach();
-    });
-    if (removedShape) {
-      removedShape.remove();
-    }
-    this.layer.draw();
-  }
-  addTransformerListeners() {
-    const component = this;
-    const tr = new Konva.Transformer();
-    this.stage.on('click', function (e) {
-      if (!this.clickStartShape) {
-        return;
-      }
-      if (e.target._id == this.clickStartShape._id) {
-        component.addDeleteListener(e.target);
-        component.layer.add(tr);
-        tr.attachTo(e.target);
-        component.transformers.push(tr);
-        component.layer.draw();
-      }
-      else {
-        tr.detach();
-        component.layer.draw();
-      }
-    });
-  }
-  addDeleteListener(shape) {
-    const component = this;
-    window.addEventListener('keydown', function (e) {
-      if (e.keyCode === 46) {
-        shape.remove();
-        component.transformers.forEach(t => {
-          t.detach();
-        });
-        const selectedShape = component.shapes.find(s => s._id == shape._id);
-        selectedShape.remove();
-        e.preventDefault();
-      }
-      component.layer.batchDraw();
-    });
-  }
-
 }
