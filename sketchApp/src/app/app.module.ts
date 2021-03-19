@@ -5,7 +5,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CanvasComponent } from './canvas/canvas.component';
-import { KonvaModule } from 'ng2-konva';
 import { ShapeService } from './services/shape.service'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { MatButtonModule } from '@angular/material/button'
@@ -43,7 +42,6 @@ import { ButtonsComponent } from './buttons/buttons.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    KonvaModule,
     BrowserAnimationsModule,
     MatButtonModule,MatIconModule,
     ReactiveFormsModule, FormsModule,
