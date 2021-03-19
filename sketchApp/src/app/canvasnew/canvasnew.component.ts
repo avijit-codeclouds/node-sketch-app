@@ -1,7 +1,6 @@
 import {
   Component, OnInit, Input, ElementRef, AfterViewInit, ViewChild, AfterContentInit, NgZone
 } from '@angular/core';
-import Konva from 'konva';
 import { ShapeService } from '../services/shape.service'
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
@@ -31,8 +30,6 @@ export class CanvasnewComponent implements OnInit {
   resultCanvasJSON : any 
 
   shapes: any = [];
-  stage: Konva.Stage;
-  layer: Konva.Layer;
   selectedButton: any = {
     'circle': false,
     'rectangle': false,
@@ -42,7 +39,6 @@ export class CanvasnewComponent implements OnInit {
     'text': false
   }
   erase: boolean = false;
-  transformers: Konva.Transformer[] = [];
   color = ''
   modeType : string = 'brush';
   getJsonStage : any

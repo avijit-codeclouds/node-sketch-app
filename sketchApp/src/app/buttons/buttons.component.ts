@@ -1,7 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { EventHandlerService } from '../services/event-handler.service';
 import { DrawingTools, DrawingColours } from '../services/models';
-
+import { ShapeService } from '../services/shape.service'
+import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-buttons',
@@ -20,9 +22,19 @@ export class ButtonsComponent implements OnInit {
 
   @Input() btnStatus: boolean = true
   @Input() resultCanvasJSON : any
+  @Input() update : boolean = false
+  @Input() getCanvas_id : string
 
+  msg : any = ''
+  className : any = ''
+  enableMessage: boolean = false
 
-  constructor(private fabricService: EventHandlerService) {
+  constructor(
+    private fabricService: EventHandlerService,
+    private shapeService: ShapeService,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.selectedColour = fabricService.selectedColour;
     console.log(this.btnStatus)
   }
@@ -39,9 +51,68 @@ export class ButtonsComponent implements OnInit {
     console.log(this.btnStatus)
   }
 
+  getRandomString(length) {
+    var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var result = '';
+    for ( var i = 0; i < length; i++ ) {
+        result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+    }
+    return result;
+  }
+
   saveDraw(){
-    console.log(`clicked...`)
-    console.log(this.resultCanvasJSON)
+    console.log(`update :: ${this.update}`)
+    console.log(`getCanvas_id :: ${this.getCanvas_id}`)
+    if(this.update == false){
+      if(this.resultCanvasJSON != undefined){
+        this.shapeService.getAuthUserDetails().subscribe(res => {
+          console.log(res._id)
+          let payload = {
+            node : this.resultCanvasJSON,
+            canvas_id : this.getRandomString(15),
+            owner_id : res._id
+          }
+          this.shapeService.saveDrawString(payload).subscribe(res => {
+            console.log(res)
+            console.log(res.result.canvas_id)
+            if(res.success == true){
+              this.router.navigateByUrl("/canvas/"+res.result._id);
+            }
+          },
+          err => {
+            console.log(err)
+          })
+        },err => {
+          console.log(err)
+        })
+      }
+    }else{
+      if(this.resultCanvasJSON != undefined){
+        this.shapeService.getAuthUserDetails().subscribe(res => {
+          console.log(res._id)
+          let payload = {
+            node : this.resultCanvasJSON,
+            canvas_id : this.getCanvas_id,
+            owner_id : res._id
+          }
+          this.shapeService.updateCanvas(payload).subscribe(res => {
+            console.log(res)
+            this.msg = res.msg
+            this.enableMessage = true
+            this.className = 'alert-info'
+            setTimeout( () => {
+              this.enableMessage = false
+            }, 5000)
+            // console.log(res.result.canvas_id)
+          },
+          err => {
+            console.log(err)
+          })
+        },err => {
+          console.log(err)
+        })
+      }
+    }
   }
 
 }
