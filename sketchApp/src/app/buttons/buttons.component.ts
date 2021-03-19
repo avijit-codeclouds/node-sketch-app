@@ -3,7 +3,8 @@ import { EventHandlerService } from '../services/event-handler.service';
 import { DrawingTools, DrawingColours } from '../services/models';
 import { ShapeService } from '../services/shape.service'
 import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar'; 
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-buttons',
@@ -28,15 +29,21 @@ export class ButtonsComponent implements OnInit {
   msg : any = ''
   className : any = ''
   enableMessage: boolean = false
+  showSharebtn : boolean = false
 
   constructor(
     private fabricService: EventHandlerService,
     private shapeService: ShapeService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private _snackBar: MatSnackBar
   ) {
     this.selectedColour = fabricService.selectedColour;
-    console.log(this.btnStatus)
+    console.log(this.activatedRoute.snapshot.params['canvas_id']);
+    if(this.activatedRoute.snapshot.params['canvas_id'] != undefined){
+      this.showSharebtn = true
+    }
   }
 
   async select(tool: DrawingTools,colour: any) {
@@ -59,6 +66,13 @@ export class ButtonsComponent implements OnInit {
     }
     return result;
   }
+
+  openSnackBar(message: string = 'Updated', action: string = 'Done') { 
+    // openSnackBar('GAME ONE','HURRAH !!!!!')
+    this._snackBar.open(message, action, { 
+      duration: 2000, 
+    }); 
+  } 
 
   saveDraw(){
     console.log(`update :: ${this.update}`)
@@ -97,6 +111,7 @@ export class ButtonsComponent implements OnInit {
           }
           this.shapeService.updateCanvas(payload).subscribe(res => {
             console.log(res)
+            this.openSnackBar()
             this.msg = res.msg
             this.enableMessage = true
             this.className = 'alert-info'
