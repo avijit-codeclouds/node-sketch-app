@@ -25,7 +25,11 @@ export class CanvasnewComponent implements OnInit {
   public selectedColour: DrawingColours;
 
   hexMessage:string;
-  disableSaveBtn : boolean = true
+
+  // disableSaveBtn : boolean = true
+  btnStatus : boolean = true
+  resultCanvasJSON : any 
+
   shapes: any = [];
   stage: Konva.Stage;
   layer: Konva.Layer;
@@ -49,7 +53,9 @@ export class CanvasnewComponent implements OnInit {
     private router: Router,
     private eventHandler: EventHandlerService, private ngZone: NgZone,
     private fabricService: EventHandlerService
-  ) { }
+  ) { 
+    this.btnStatus = true
+  }
 
   ngOnInit() {
     let width = 1920//window.innerWidth * 0.9;
@@ -86,30 +92,31 @@ export class CanvasnewComponent implements OnInit {
     console.log('draw image ...')
     console.log(this.getRandomString(15))
     console.log(`get draw string ::`)
-    if(this.getJsonStage != undefined){
-      console.log(this.getJsonStage)
-      //get owner details
-      this.shapeService.getAuthUserDetails().subscribe(res => {
-        console.log(res._id)
-        let payload = {
-          node : this.getJsonStage,
-          canvas_id : this.getRandomString(15),
-          owner_id : res._id
-        }
-        this.shapeService.saveDrawString(payload).subscribe(res => {
-          console.log(res)
-          console.log(res.result.canvas_id)
-          if(res.success == true){
-            this.router.navigateByUrl("/canvas/"+res.result._id);
-          }
-        },
-        err => {
-          console.log(err)
-        })
-      },err => {
-        console.log(err)
-      })
-    }
+    console.log(this.canvas)
+    // if(this.getJsonStage != undefined){
+    //   console.log(this.getJsonStage)
+    //   //get owner details
+    //   this.shapeService.getAuthUserDetails().subscribe(res => {
+    //     console.log(res._id)
+    //     let payload = {
+    //       node : this.getJsonStage,
+    //       canvas_id : this.getRandomString(15),
+    //       owner_id : res._id
+    //     }
+    //     this.shapeService.saveDrawString(payload).subscribe(res => {
+    //       console.log(res)
+    //       console.log(res.result.canvas_id)
+    //       if(res.success == true){
+    //         this.router.navigateByUrl("/canvas/"+res.result._id);
+    //       }
+    //     },
+    //     err => {
+    //       console.log(err)
+    //     })
+    //   },err => {
+    //     console.log(err)
+    //   })
+    // }
   }
 
   modeChange(mode : any){
@@ -179,25 +186,43 @@ export class CanvasnewComponent implements OnInit {
     this.canvas.on('object:scaling', e => this.ngZone.run(() => this.onObjectScaling(e as any)));
   }
 
+  private getCanvasJSON(){
+    return JSON.stringify(this.canvas)
+    // console.log(JSON.stringify(this.canvas))
+  }
+
   private onCanvasMouseDown(event: { e: Event }) {
     this.eventHandler.mouseDown(event.e);
     this.avoidDragAndClickEventsOfOtherUILibs(event.e);
+    this.resultCanvasJSON = this.getCanvasJSON()
   }
+
   private onCanvasMouseMove(event: { e: Event }) {
+    this.btnStatus = false
     this.eventHandler.mouseMove(event.e);
+    this.resultCanvasJSON = this.getCanvasJSON()
   }
+
   private onCanvasMouseUp() {
     this.eventHandler.mouseUp();
+    this.resultCanvasJSON = this.getCanvasJSON()
   }
+
   private onSelectionCreated(e: { target: CustomFabricObject }) {
     this.eventHandler.objectSelected(e.target);
+    this.resultCanvasJSON = this.getCanvasJSON()
   }
+
   private onSelectionUpdated(e: { target: CustomFabricObject }) {
     this.eventHandler.objectSelected(e.target);
+    this.resultCanvasJSON = this.getCanvasJSON()
   }
+
   private onObjectMoving(e: any) {
     this.eventHandler.objectMoving(e.target.id, e.target.type, e.target.left, e.target.top);
+    this.resultCanvasJSON = this.getCanvasJSON()
   }
+
   private onObjectScaling(e: any) {
     this.eventHandler.objectScaling(
       e.target.id,
@@ -205,6 +230,7 @@ export class CanvasnewComponent implements OnInit {
       { x: e.target.scaleX, y: e.target.scaleY },
       { left: e.target.left, top: e.target.top },
     );
+    this.resultCanvasJSON = this.getCanvasJSON()
   }
 
   private avoidDragAndClickEventsOfOtherUILibs(e: Event) {
