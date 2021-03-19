@@ -26,10 +26,11 @@ import { JwtInterceptor } from './guards/jwt.interceptor'
 import { EventHandlerService } from './services/event-handler.service';
 import { FabricService } from './services/fabric.service';
 import { ButtonsComponent } from './buttons/buttons.component';
-import { DialogComponent } from './mat/dialog/dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule} from '@angular/material/snack-bar'
-import { DialogBodyComponent } from './mat/dialog-body/dialog-body.component';
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { DialogComponent } from './mat/dialog/dialog.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,6 @@ import { DialogBodyComponent } from './mat/dialog-body/dialog-body.component';
     CanvasspecificComponent,
     ButtonsComponent,
     DialogComponent,
-    DialogBodyComponent
   ],
   imports: [
     BrowserModule,
@@ -56,14 +56,13 @@ import { DialogBodyComponent } from './mat/dialog-body/dialog-body.component';
     NgFlashMessagesModule.forRoot(),
     HttpClientModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,MatFormFieldModule,MatInputModule
   ],
   providers: [
     ShapeService,EventHandlerService,FabricService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
-  entryComponents: [DialogBodyComponent]
 
 })
 export class AppModule { }
