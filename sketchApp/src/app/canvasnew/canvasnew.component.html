@@ -1,5 +1,5 @@
 <div class="text-center">
-    <app-buttons></app-buttons>
+    <app-buttons [btnStatus]="btnStatus" [resultCanvasJSON]="resultCanvasJSON"></app-buttons>
     <!-- <app-colors></app-colors> -->
     <app-colors (hexMessageEvent)="receiveMessage($event,'')"></app-colors>
     <!-- <div id="canvas"></div> -->

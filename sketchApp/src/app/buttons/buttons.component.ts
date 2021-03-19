@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { EventHandlerService } from '../services/event-handler.service';
 import { DrawingTools, DrawingColours } from '../services/models';
 
@@ -16,10 +16,15 @@ export class ButtonsComponent implements OnInit {
   public colours = Object.values(DrawingColours);
   public selectedColour: DrawingColours;
 
-  disableSaveBtn : boolean = true
+  // disableSaveBtn : boolean = true
+
+  @Input() btnStatus: boolean = true
+  @Input() resultCanvasJSON : any
+
 
   constructor(private fabricService: EventHandlerService) {
     this.selectedColour = fabricService.selectedColour;
+    console.log(this.btnStatus)
   }
 
   async select(tool: DrawingTools,colour: any) {
@@ -31,10 +36,12 @@ export class ButtonsComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.btnStatus)
   }
 
   saveDraw(){
     console.log(`clicked...`)
+    console.log(this.resultCanvasJSON)
   }
 
 }
