@@ -7,6 +7,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { fabric } from 'fabric';
 import { EventHandlerService } from '../services/event-handler.service';
 import { CustomFabricObject, DrawingTools, DrawingColours } from '../services/models';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+
+export interface DialogData {
+  animal: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-canvasspecific',

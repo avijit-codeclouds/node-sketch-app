@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,6 +26,10 @@ import { JwtInterceptor } from './guards/jwt.interceptor'
 import { EventHandlerService } from './services/event-handler.service';
 import { FabricService } from './services/fabric.service';
 import { ButtonsComponent } from './buttons/buttons.component';
+import { DialogComponent } from './mat/dialog/dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule} from '@angular/material/snack-bar'
+import { DialogBodyComponent } from './mat/dialog-body/dialog-body.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +42,9 @@ import { ButtonsComponent } from './buttons/buttons.component';
     KonvastaticComponent,
     CanvasnewComponent,
     CanvasspecificComponent,
-    ButtonsComponent
+    ButtonsComponent,
+    DialogComponent,
+    DialogBodyComponent
   ],
   imports: [
     BrowserModule,
@@ -47,12 +54,19 @@ import { ButtonsComponent } from './buttons/buttons.component';
     ReactiveFormsModule, FormsModule,
     ColorTwitterModule,
     NgFlashMessagesModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    MatDialogModule,
+    MatSnackBarModule
   ],
   providers: [
     ShapeService,EventHandlerService,FabricService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [DialogBodyComponent]
+
 })
 export class AppModule { }
+
+// platformBrowserDynamic().bootstrapModule(AppModule)
+//   .catch(err => console.error(err));
