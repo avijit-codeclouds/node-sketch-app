@@ -6,3 +6,30 @@
     <!-- <div id="canvas"></div> -->
     <canvas id="canvas" width="1920" height="350" style="border:1px solid #000000;"></canvas>
 </div>
+
+
+<button type="button" class="btn btn-primary" (click)="openModal(template)">Create template modal</button>
+ 
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Share Canvas</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form autocomplete="off" [formGroup]="form" (ngSubmit)="shareCanvas()">
+      <div class="form-group">
+        <label for="email">Link:</label>
+        <input name="onlineUrl" id="onlineUrl" formControlName="url"
+        type="text" class="form-control" placeholder="Event Url..." value="{{ getWindowLink }}"/>
+      </div>
+      <div class="checkbox">
+        <label><input type="checkbox"> Remember me</label>
+      </div>
+      <button type="submit" class="btn btn-primary">Share</button> &nbsp;
+      <button type="button" class="btn btn-default" (click)="modalRef.hide()">Cancel</button>
+    </form>
+  </div>
+</ng-template>
+  

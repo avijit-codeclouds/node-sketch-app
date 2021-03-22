@@ -1,5 +1,5 @@
 import {
-  Component, OnInit, Input, ElementRef, AfterViewInit, ViewChild, NgZone
+  Component, OnInit, Input, ElementRef, AfterViewInit, ViewChild, NgZone, TemplateRef
 } from '@angular/core';
 import { ShapeService } from '../services/shape.service'
 import { AuthService } from '../services/auth.service';
@@ -7,8 +7,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { fabric } from 'fabric';
 import { EventHandlerService } from '../services/event-handler.service';
 import { CustomFabricObject, DrawingTools, DrawingColours } from '../services/models';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
 
 export interface DialogData {
   animal: string;
@@ -49,16 +49,35 @@ export class CanvasspecificComponent implements OnInit {
   public colours = Object.values(DrawingColours);
   public selectedColour: DrawingColours;
 
+  modalRef: BsModalRef;//show modal
+  getWindowLink : string
+  isReadOnly : boolean = true
+  form: FormGroup;
+
   constructor(
     private shapeService: ShapeService,
     private authService: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private eventHandler: EventHandlerService, private ngZone: NgZone,
-    private fabricService: EventHandlerService
+    private fabricService: EventHandlerService,
+    private modalService: BsModalService,
+    public formBuilder: FormBuilder,
   ) { 
     console.log(this.activatedRoute.snapshot.params['canvas_id']);
     this.canvas_id = this.activatedRoute.snapshot.params['canvas_id']
+    this.getWindowLink = window.location.href
+    this.form = this.formBuilder.group({
+      url: [{ value: '', disabled: true }, Validators.required]
+    });
+  }
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
+  }
+
+  shareCanvas(){
+    console.log('share canvas...')
   }
 
   ngOnInit() {
@@ -89,6 +108,7 @@ export class CanvasspecificComponent implements OnInit {
       console.log(err)
     })
   }
+
 
   receiveMessage($event,colour: any,tool : any = 'PENCIL') {
     this.hexMessage = $event

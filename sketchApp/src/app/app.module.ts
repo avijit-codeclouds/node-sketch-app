@@ -30,7 +30,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule} from '@angular/material/snack-bar'
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
-import { DialogComponent } from './mat/dialog/dialog.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
 
 @NgModule({
   declarations: [
@@ -44,7 +44,6 @@ import { DialogComponent } from './mat/dialog/dialog.component';
     CanvasnewComponent,
     CanvasspecificComponent,
     ButtonsComponent,
-    DialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,7 +55,8 @@ import { DialogComponent } from './mat/dialog/dialog.component';
     NgFlashMessagesModule.forRoot(),
     HttpClientModule,
     MatDialogModule,
-    MatSnackBarModule,MatFormFieldModule,MatInputModule
+    MatSnackBarModule,MatFormFieldModule,MatInputModule,
+    ModalModule.forRoot()
   ],
   providers: [
     ShapeService,EventHandlerService,FabricService,
