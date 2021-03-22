@@ -13,4 +13,4 @@
 </button>  &nbsp;
 <button class="btn btn-success" [disabled]="btnStatus" (click)="saveDraw()">Save <i class="fa fa-floppy-o" aria-hidden="true"></i>
 </button> &nbsp;
-<img src="../../assets/images/share.png" *ngIf="showSharebtn"/>
+<img src="../../assets/images/share.png" class="btn" (click)="handleModal()" *ngIf="showSharebtn"/>

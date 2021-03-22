@@ -18,6 +18,15 @@ router.get('/canvas-list', auth, async function(req, res, next) {
     }
 });
 
+router.get('/user-list', auth, async function(req, res, next) {
+  try {
+    const user = await User.find({_id : {$ne : req.user.id}}).select('name id')//get user list without 
+    return res.status(200).json(user)
+  } catch (error) {
+    return res.status(500).json({ success :false, errors:error.message})
+  }
+})
+
 router.get('/canvas/:_id', auth, async function(req, res, next) {
     try {
       const draw = await Draw.findById(req.params._id)

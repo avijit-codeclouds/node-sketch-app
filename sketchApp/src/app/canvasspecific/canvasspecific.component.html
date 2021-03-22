@@ -1,6 +1,7 @@
 <div class="text-center">
     <app-buttons [btnStatus]="btnStatus" [resultCanvasJSON]="resultCanvasJSON" 
-    [update]="update" [getCanvas_id]="getCanvas_id"></app-buttons>
+    [update]="update" [getCanvas_id]="getCanvas_id"
+    (openModalNow)="getModalMsg($event)"></app-buttons>
     <!-- <app-colors></app-colors> -->
     <app-colors (hexMessageEvent)="receiveMessage($event,'')"></app-colors>
     <!-- <div id="canvas"></div> -->
@@ -8,7 +9,8 @@
 </div>
 
 
-<button type="button" class="btn btn-primary" (click)="openModal(template)">Create template modal</button>
+<button type="button" class="btn btn-primary hideBtn" id="openModalButton" 
+(click)="openModal(template)">Create template modal</button>
  
 <ng-template #template>
   <div class="modal-header">
@@ -25,7 +27,9 @@
         type="text" class="form-control" placeholder="Event Url..." value="{{ getWindowLink }}"/>
       </div>
       <div class="checkbox">
-        <label><input type="checkbox"> Remember me</label>
+        <ng-container *ngFor="let user of userList">
+            <label><input type="checkbox"> {{user.name}}</label>&nbsp;
+        </ng-container>
       </div>
       <button type="submit" class="btn btn-primary">Share</button> &nbsp;
       <button type="button" class="btn btn-default" (click)="modalRef.hide()">Cancel</button>

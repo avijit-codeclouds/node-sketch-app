@@ -45,6 +45,7 @@ export class CanvasspecificComponent implements OnInit {
   selected = this.fabricService.selectedTool;
   update : boolean = true
   getCanvas_id : any
+  userList : any
 
   public colours = Object.values(DrawingColours);
   public selectedColour: DrawingColours;
@@ -53,6 +54,7 @@ export class CanvasspecificComponent implements OnInit {
   getWindowLink : string
   isReadOnly : boolean = true
   form: FormGroup;
+  hideBtnNow : boolean = true
 
   constructor(
     private shapeService: ShapeService,
@@ -70,10 +72,24 @@ export class CanvasspecificComponent implements OnInit {
     this.form = this.formBuilder.group({
       url: [{ value: '', disabled: true }, Validators.required]
     });
+    this.shapeService.getUserList().subscribe(result => {
+      console.log(result)
+      this.userList = result
+    },
+    err => {
+      console.log(err)
+    })
   }
 
+  //  openModal(template: TemplateRef<any>) {
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
+  }
+
+  getModalMsg($event){
+    if($event == true){
+      document.getElementById("openModalButton").click();
+    }
   }
 
   shareCanvas(){
