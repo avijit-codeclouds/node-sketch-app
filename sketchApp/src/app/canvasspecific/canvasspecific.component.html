@@ -15,7 +15,7 @@
 <ng-template #template>
   <div class="modal-header">
     <h4 class="modal-title pull-left">Share Canvas</h4>
-    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+    <button type="button" class="close pull-right" aria-label="Close" id="closeModal" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -27,8 +27,9 @@
         type="text" class="form-control" placeholder="Event Url..." value="{{ getWindowLink }}"/>
       </div>
       <div class="checkbox">
-        <ng-container *ngFor="let user of userList">
-            <label><input type="checkbox"> {{user.name}}</label>&nbsp;
+        <ng-container *ngFor="let user of actualSharedUser">
+            <label><input type="checkbox" name="user_ids" 
+            (change)="onChange(user._id, $event.target.checked)"> {{user.name}}</label>&nbsp;
         </ng-container>
       </div>
       <button type="submit" class="btn btn-primary">Share</button> &nbsp;

@@ -75,7 +75,7 @@ export class ButtonsComponent implements OnInit {
     return result;
   }
 
-  openSnackBar(message: string = 'Updated', action: string = 'Done') { 
+  openSnackBar(message: string, action: string = 'Done') { 
     // openSnackBar('GAME ONE','HURRAH !!!!!')
     this._snackBar.open(message, action, { 
       duration: 2000, 
@@ -119,7 +119,7 @@ export class ButtonsComponent implements OnInit {
           }
           this.shapeService.updateCanvas(payload).subscribe(res => {
             console.log(res)
-            this.openSnackBar()
+            this.openSnackBar('Updated')
             this.msg = res.msg
             this.enableMessage = true
             this.className = 'alert-info'

@@ -27,6 +27,32 @@ router.get('/user-list', auth, async function(req, res, next) {
   }
 })
 
+router.post('/share-canvas', auth, [
+    check('canvas_id','Canvas id is required').not().isEmpty(),
+    check('user_ids','User id is required').not().isEmpty()
+  ],async function(req, res, next) {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(200).json({ errors: errors.array() });
+    }
+    const { 
+      canvas_id,user_ids
+    } = req.body;
+    let payload = {
+      canvas_id : canvas_id,
+      shared : user_ids
+    }
+    Draw.findByIdAndUpdate(canvas_id,payload).then(updated => {
+      return res.status(200).json({ success :true , msg : 'canvas sharesd', result : updated })
+    }).catch(err => {
+      return res.json({ success :false, result : err })
+    })
+  } catch (error) {
+    return res.status(500).json({ success :false, errors:error.message})
+  }
+})
+
 router.get('/canvas/:_id', auth, async function(req, res, next) {
     try {
       const draw = await Draw.findById(req.params._id)
