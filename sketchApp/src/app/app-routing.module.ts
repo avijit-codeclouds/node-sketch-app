@@ -8,7 +8,6 @@ import { LogoutComponent } from './logout/logout.component'
 import { KonvastaticComponent } from './konvastatic/konvastatic.component';
 import { CanvasnewComponent } from './canvasnew/canvasnew.component';
 import { CanvasspecificComponent } from './canvasspecific/canvasspecific.component';
-import { DialogComponent } from './mat/dialog/dialog.component';
 
 const routes: Routes = [
   // { path:'',component: CanvasComponent },
@@ -19,7 +18,6 @@ const routes: Routes = [
   { path: 'login', component : LoginComponent },
   { path: 'register', component : RegisterComponent },
   { path : 'logout', component : LogoutComponent },
-  { path: 'dialog', component : DialogComponent },
   { path: '**', component: CanvasComponent },
 ];
 
