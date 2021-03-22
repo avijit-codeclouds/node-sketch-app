@@ -8,7 +8,8 @@ import { fabric } from 'fabric';
 import { EventHandlerService } from '../services/event-handler.service';
 import { CustomFabricObject, DrawingTools, DrawingColours } from '../services/models';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, NgForm, FormArray, FormControl } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar'; 
 
 export interface DialogData {
   animal: string;
@@ -46,6 +47,7 @@ export class CanvasspecificComponent implements OnInit {
   update : boolean = true
   getCanvas_id : any
   userList : any
+  actualSharedUser : any
 
   public colours = Object.values(DrawingColours);
   public selectedColour: DrawingColours;
@@ -65,35 +67,90 @@ export class CanvasspecificComponent implements OnInit {
     private fabricService: EventHandlerService,
     private modalService: BsModalService,
     public formBuilder: FormBuilder,
+    private _snackBar: MatSnackBar
   ) { 
     console.log(this.activatedRoute.snapshot.params['canvas_id']);
     this.canvas_id = this.activatedRoute.snapshot.params['canvas_id']
     this.getWindowLink = window.location.href
     this.form = this.formBuilder.group({
-      url: [{ value: '', disabled: true }, Validators.required]
+      url: [{ value: '', disabled: true }, Validators.required],
+      user_ids: this.formBuilder.array([])
     });
-    this.shapeService.getUserList().subscribe(result => {
-      console.log(result)
-      this.userList = result
-    },
-    err => {
-      console.log(err)
-    })
+    
+    // this.form = this.formBuilder.group({
+    //   useremail: this.formBuilder.array([])
+    // });
   }
+
+  onChange(email: string, isChecked: boolean) {
+    const user_ids_arr = <FormArray>this.form.controls.user_ids;
+
+    if (isChecked) {
+      user_ids_arr.push(new FormControl(email));
+    } else {
+      let index = user_ids_arr.controls.findIndex(x => x.value == email)
+      user_ids_arr.removeAt(index);
+    }
+  }
+
+  openSnackBar(message: string, action: string = 'Done') { 
+    // openSnackBar('GAME ONE','HURRAH !!!!!')
+    this._snackBar.open(message, action, { 
+      duration: 2000, 
+    }); 
+  } 
 
   //  openModal(template: TemplateRef<any>) {
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
   }
 
+  removeDepartment(name: string): void {
+    // console.log(this.userList)
+    // this.userList = this.userList.filter(item => item != name);
+    return this.userList = this.userList.filter(item => item._id != name);
+  }
+
   getModalMsg($event){
     if($event == true){
+      this.shapeService.getUserList().subscribe(result => {
+        console.log(result)
+        this.userList = result
+        this.shapeService.getParticularCanvas(this.canvas_id).subscribe(res => {
+          let sharedUsers = res.result.shared
+          let obj = this.userList
+          for(let i=0;i<sharedUsers.length;i++){
+            this.removeDepartment(sharedUsers[i])
+          }  
+          this.actualSharedUser = this.userList
+          // sharedUsers = this.removeDepartment("6049f667df747c8b0166cc99");
+          },err => {
+            console.log(err)
+          })
+      },
+      err => {
+        console.log(err)
+      })
       document.getElementById("openModalButton").click();
     }
   }
 
   shareCanvas(){
     console.log('share canvas...')
+    // console.log(this.form.value.user_ids)
+    let payload = {
+      canvas_id : this.canvas_id,
+      user_ids : this.form.value.user_ids
+    }
+    this.shapeService.updateShareCanvas(payload).subscribe(result => {
+      console.log(result)
+      if(result.success == true){
+        document.getElementById('closeModal').click()
+        this.openSnackBar('Canvas Shared')
+      }
+    },err => {
+      console.log(err)
+    })
   }
 
   ngOnInit() {
