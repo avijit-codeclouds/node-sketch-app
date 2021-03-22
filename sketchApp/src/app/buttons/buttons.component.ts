@@ -34,6 +34,7 @@ export class ButtonsComponent implements OnInit {
   className : any = ''
   enableMessage: boolean = false
   showSharebtn : boolean = false
+  particularCanvasId : any
 
   constructor(
     private fabricService: EventHandlerService,
@@ -46,7 +47,8 @@ export class ButtonsComponent implements OnInit {
     this.selectedColour = fabricService.selectedColour;
     console.log(this.activatedRoute.snapshot.params['canvas_id']);
     if(this.activatedRoute.snapshot.params['canvas_id'] != undefined){
-      this.showSharebtn = true
+      // this.showSharebtn = true
+      this.particularCanvasId = this.activatedRoute.snapshot.params['canvas_id']
     }
   }
 
@@ -65,6 +67,20 @@ export class ButtonsComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.btnStatus)
+    this.shapeService.getParticularCanvas(this.particularCanvasId).subscribe(res => {
+      console.log(res)
+      this.shapeService.getAuthUserDetails().subscribe(data => {
+        if(res.result.owner_id == data._id){
+          this.showSharebtn = true
+        }else{
+          this.showSharebtn = false
+        }
+      },err => {
+        console.log(err)
+      })
+    },err => {
+      console.log(err)
+    })
   }
 
   getRandomString(length) {
