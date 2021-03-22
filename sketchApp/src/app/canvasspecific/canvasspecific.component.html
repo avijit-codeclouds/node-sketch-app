@@ -1,6 +1,6 @@
 <div class="text-center">
     <app-buttons [btnStatus]="btnStatus" [resultCanvasJSON]="resultCanvasJSON" 
-    [update]="update" [getCanvas_id]="getCanvas_id"
+    [update]="update" [getCanvas_id]="getCanvas_id" [isSharedUser]="isSharedUser"
     (openModalNow)="getModalMsg($event)"></app-buttons>
     <!-- <app-colors></app-colors> -->
     <app-colors (hexMessageEvent)="receiveMessage($event,'')"></app-colors>

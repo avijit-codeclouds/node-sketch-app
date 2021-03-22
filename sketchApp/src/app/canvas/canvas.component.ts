@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 export class CanvasComponent implements OnInit {
   
   canvasList : any
+  sharedCanvasList : any
 
   constructor(
     private shapeService: ShapeService,
@@ -25,6 +26,13 @@ export class CanvasComponent implements OnInit {
         if(res.success == true){
           this.canvasList = res.result
         }
+      },err => {
+        console.log(err)
+      })
+      //shared with me canvas
+      this.shapeService.sharedWithMeCanvas().subscribe(response => {
+        console.log(response)
+        this.sharedCanvasList = response.result
       },err => {
         console.log(err)
       })
