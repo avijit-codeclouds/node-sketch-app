@@ -51,6 +51,11 @@ export class ShapeService {
     .pipe(retry(3), catchError(this.handleError));
   }
 
+  sharedWithMeCanvas() : Observable<any> {
+    return this.httpClient.get(`${this.API_URL}/drawing/shared-with-me-canvas`)
+    .pipe(retry(3), catchError(this.handleError));
+  }
+
   getParticularCanvas(canvas_id : any) : Observable<any> { 
     return this.httpClient.get(`${this.API_URL}/drawing/canvas/`+canvas_id)
     .pipe(retry(3), catchError(this.handleError));

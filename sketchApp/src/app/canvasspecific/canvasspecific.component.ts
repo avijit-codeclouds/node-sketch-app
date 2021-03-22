@@ -57,6 +57,7 @@ export class CanvasspecificComponent implements OnInit {
   isReadOnly : boolean = true
   form: FormGroup;
   hideBtnNow : boolean = true
+  isSharedUser : boolean = false
 
   constructor(
     private shapeService: ShapeService,
@@ -157,6 +158,16 @@ export class CanvasspecificComponent implements OnInit {
     this.shapeService.getParticularCanvas(this.canvas_id).subscribe(res => {
       console.log(res)
       this.getNode = res.result.node
+      this.shapeService.getAuthUserDetails().subscribe(data => {
+        if(res.result.owner_id == data._id){
+          this.isSharedUser = false
+        }else{
+          this.isSharedUser = true
+        }
+        // console.log(`isSharedUser :: ${this.isSharedUser}`)
+      },err => {
+        console.log(err)
+      })
       // console.log(this.getNode)
       // let width = 1920//window.innerWidth * 0.9;
       // let height = 350

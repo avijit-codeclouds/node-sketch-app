@@ -18,6 +18,17 @@ router.get('/canvas-list', auth, async function(req, res, next) {
     }
 });
 
+router.get('/shared-with-me-canvas', auth, async function(req, res, next) {
+  try {
+    console.log(req.user.id)
+    const draw = await Draw.find({ "shared": req.user.id })
+    return res.status(200).json({ success :true, result :  draw })
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).json({ success :false, errors:error.message})
+  }
+});
+
 router.get('/user-list', auth, async function(req, res, next) {
   try {
     const user = await User.find({_id : {$ne : req.user.id}}).select('name id')//get user list without 

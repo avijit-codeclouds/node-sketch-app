@@ -25,6 +25,7 @@ export class ButtonsComponent implements OnInit {
   @Input() resultCanvasJSON : any
   @Input() update : boolean = false
   @Input() getCanvas_id : string
+  @Input() isSharedUser : boolean
   @Output() openModalNow = new EventEmitter<any>();
   openMDL: boolean = false 
 
@@ -111,26 +112,57 @@ export class ButtonsComponent implements OnInit {
     }else{
       if(this.resultCanvasJSON != undefined){
         this.shapeService.getAuthUserDetails().subscribe(res => {
-          console.log(res._id)
-          let payload = {
-            node : this.resultCanvasJSON,
-            canvas_id : this.getCanvas_id,
-            owner_id : res._id
+          console.log(this.isSharedUser)
+          if(this.isSharedUser == true){
+            let payload
+            this.shapeService.getParticularCanvas(this.getCanvas_id).subscribe(res => {
+              console.log(res.result.owner_id)
+              payload = {
+                node : this.resultCanvasJSON,
+                canvas_id : this.getCanvas_id,
+                owner_id : res.result.owner_id
+              }
+              console.log(payload)
+              this.shapeService.updateCanvas(payload).subscribe(res => {
+                console.log(res)
+                this.openSnackBar('Updated')
+                this.msg = res.msg
+                this.enableMessage = true
+                this.className = 'alert-info'
+                setTimeout( () => {
+                  this.enableMessage = false
+                }, 5000)
+                // console.log(res.result.canvas_id)
+              },
+              err => {
+                console.log(err)
+              })
+            },err => {
+              console.log(err)
+            })
+          }else{
+            let payload
+            payload = {
+              node : this.resultCanvasJSON,
+              canvas_id : this.getCanvas_id,
+              owner_id : res._id
+            }
+            console.log(payload)
+            this.shapeService.updateCanvas(payload).subscribe(res => {
+              console.log(res)
+              this.openSnackBar('Updated')
+              this.msg = res.msg
+              this.enableMessage = true
+              this.className = 'alert-info'
+              setTimeout( () => {
+                this.enableMessage = false
+              }, 5000)
+              // console.log(res.result.canvas_id)
+            },
+            err => {
+              console.log(err)
+            })
           }
-          this.shapeService.updateCanvas(payload).subscribe(res => {
-            console.log(res)
-            this.openSnackBar('Updated')
-            this.msg = res.msg
-            this.enableMessage = true
-            this.className = 'alert-info'
-            setTimeout( () => {
-              this.enableMessage = false
-            }, 5000)
-            // console.log(res.result.canvas_id)
-          },
-          err => {
-            console.log(err)
-          })
         },err => {
           console.log(err)
         })
