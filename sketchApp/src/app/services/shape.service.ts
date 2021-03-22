@@ -5,7 +5,6 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { catchError, map, retry } from 'rxjs/operators';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment'
-import Konva from 'konva';
 import { AuthService } from './auth.service'
 
 @Injectable({
@@ -57,6 +56,11 @@ export class ShapeService {
     .pipe(retry(3), catchError(this.handleError));
   }
 
+  getUserList() : Observable<any> {
+    return this.httpClient.get(`${this.API_URL}/drawing/user-list`)
+    .pipe(retry(3), catchError(this.handleError));
+  }
+  
   handleError(error: HttpErrorResponse) {
     let errorMessage = 'Unknown error!';
     if (error.error instanceof ErrorEvent) {
@@ -71,16 +75,5 @@ export class ShapeService {
     return throwError(errorMessage);
   }
   
-  line(pos, mode: string = 'brush',color: any) {
-    // console.log(`color SV :: ${color}`)
-    return new Konva.Line({
-      stroke: color,
-      strokeWidth: 5,
-      shadowEnabled : false,
-      globalCompositeOperation:
-        mode === 'brush' ? 'source-over' : 'destination-out',
-      points: [pos.x, pos.y],
-    });
-  }
   
 }

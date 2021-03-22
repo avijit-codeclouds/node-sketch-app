@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { EventHandlerService } from '../services/event-handler.service';
 import { DrawingTools, DrawingColours } from '../services/models';
 import { ShapeService } from '../services/shape.service'
@@ -25,6 +25,9 @@ export class ButtonsComponent implements OnInit {
   @Input() resultCanvasJSON : any
   @Input() update : boolean = false
   @Input() getCanvas_id : string
+  @Output() openModalNow = new EventEmitter<any>();
+  openMDL: boolean = false 
+
 
   msg : any = ''
   className : any = ''
@@ -52,6 +55,11 @@ export class ButtonsComponent implements OnInit {
     this.selectedColour = this.fabricService.selectedColour;
     this.fabricService.selectedTool = tool;
     this.selected = this.fabricService.selectedTool;
+  }
+
+  handleModal(){
+    this.openMDL = true
+    this.openModalNow.emit(this.openMDL)
   }
 
   ngOnInit() {
