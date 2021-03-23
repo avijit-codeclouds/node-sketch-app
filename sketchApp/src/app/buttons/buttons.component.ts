@@ -67,20 +67,22 @@ export class ButtonsComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.btnStatus)
-    this.shapeService.getParticularCanvas(this.particularCanvasId).subscribe(res => {
-      console.log(res)
-      this.shapeService.getAuthUserDetails().subscribe(data => {
-        if(res.result.owner_id == data._id){
-          this.showSharebtn = true
-        }else{
-          this.showSharebtn = false
-        }
+    if(this.activatedRoute.snapshot.params['canvas_id'] != undefined){
+      this.shapeService.getParticularCanvas(this.particularCanvasId).subscribe(res => {
+        console.log(res)
+        this.shapeService.getAuthUserDetails().subscribe(data => {
+          if(res.result.owner_id == data._id){
+            this.showSharebtn = true
+          }else{
+            this.showSharebtn = false
+          }
+        },err => {
+          console.log(err)
+        })
       },err => {
         console.log(err)
       })
-    },err => {
-      console.log(err)
-    })
+    }
   }
 
   getRandomString(length) {
