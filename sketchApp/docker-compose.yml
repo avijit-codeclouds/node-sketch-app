@@ -1,0 +1,10 @@
+version: '3'
+services:
+  app:
+    container_name: sketch-client
+    restart: always
+    build: .
+    ports:
+      - '90:4000'
+    # environment:
+    #  - SERVER_PORT=8080
