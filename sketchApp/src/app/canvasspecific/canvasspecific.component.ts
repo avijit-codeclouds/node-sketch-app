@@ -71,7 +71,7 @@ export class CanvasspecificComponent implements OnInit {
     public formBuilder: FormBuilder,
     private _snackBar: MatSnackBar
   ) { 
-    console.log(this.activatedRoute.snapshot.params['canvas_id']);
+    // console.log(this.activatedRoute.snapshot.params['canvas_id']);
     this.canvas_id = this.activatedRoute.snapshot.params['canvas_id']
     this.getWindowLink = window.location.href
     this.form = this.formBuilder.group({
@@ -116,7 +116,7 @@ export class CanvasspecificComponent implements OnInit {
   getModalMsg($event){
     if($event == true){
       this.shapeService.getUserList().subscribe(result => {
-        console.log(result)
+        // console.log(result)
         this.userList = result
         this.shapeService.getParticularCanvas(this.canvas_id).subscribe(res => {
           let sharedUsers = res.result.shared
@@ -138,15 +138,15 @@ export class CanvasspecificComponent implements OnInit {
   }
 
   shareCanvas(){
-    console.log('share canvas...')
+    // console.log('share canvas...')
     // console.log(this.form.value.user_ids)
-    console.log(this.getSharedIds)
+    // console.log(this.getSharedIds)
     let payload = {
       canvas_id : this.canvas_id,
       user_ids : this.getSharedIds.concat(this.form.value.user_ids)//this.form.value.user_ids
     }
     this.shapeService.updateShareCanvas(payload).subscribe(result => {
-      console.log(result)
+      // console.log(result)
       if(result.success == true){
         document.getElementById('closeModal').click()
         this.openSnackBar('Canvas Shared')
@@ -158,7 +158,7 @@ export class CanvasspecificComponent implements OnInit {
 
   ngOnInit() {
     this.shapeService.getParticularCanvas(this.canvas_id).subscribe(res => {
-      console.log(res)
+      // console.log(res)
       this.getSharedIds = res.result.shared
       this.getNode = res.result.node
       this.shapeService.getAuthUserDetails().subscribe(data => {
@@ -174,8 +174,8 @@ export class CanvasspecificComponent implements OnInit {
       // console.log(this.getNode)
       // let width = 1920//window.innerWidth * 0.9;
       // let height = 350
-      console.log(window.innerWidth)
-      console.log(window.innerHeight)
+      // console.log(window.innerWidth)
+      // console.log(window.innerHeight)
       let json = this.getNode
       if (this.eventHandler.canvas) {
         this.eventHandler.canvas.dispose();
@@ -185,6 +185,7 @@ export class CanvasspecificComponent implements OnInit {
         preserveObjectStacking: true,
         backgroundColor : '#ffffff'//"#f9f9f9"
       });
+      this.canvas.setDimensions({width:window.innerWidth, height:350});
       this.canvas.loadFromJSON(json, this.canvas.renderAll.bind(this.canvas));
       this.eventHandler.canvas = this.canvas;
       this.eventHandler.extendToObjectWithId();
@@ -207,8 +208,8 @@ export class CanvasspecificComponent implements OnInit {
     this.selectedColour = this.fabricService.selectedColour;
     this.fabricService.selectedTool = tool;
     this.selected = this.fabricService.selectedTool;
-    console.log(this.hexMessage)
-    console.log(`color :: ${this.color}`)
+    // console.log(this.hexMessage)
+    // console.log(`color :: ${this.color}`)
   }
 
   private addEventListeners() {

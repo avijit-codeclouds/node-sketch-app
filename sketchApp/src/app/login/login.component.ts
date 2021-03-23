@@ -47,20 +47,20 @@ export class LoginComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    console.log(this.form.value)
+    // console.log(this.form.value)
     this.authService.login(this.form.value).subscribe(res => {
       if(res.errors){
-        console.log(res.errors[0].msg)
+        // console.log(res.errors[0].msg)
         this.msg = res.errors[0].msg
         this.enableMessage = true
         this.className = 'alert-danger'
         setTimeout( ()=>{
-          console.log('works')
+          // console.log('works')
           this.enableMessage = false
-          console.log(`enableMessage :: ${this.enableMessage}`)
+          // console.log(`enableMessage :: ${this.enableMessage}`)
         }, 5000)
       }else{
-        console.log(res)
+        // console.log(res)
         this.authService.saveToken(res.token)
         this.redirect.emit(this.loggedInText);//emits the data to the parent
         this.router.navigateByUrl("/");

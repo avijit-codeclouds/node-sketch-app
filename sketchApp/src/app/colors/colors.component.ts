@@ -19,12 +19,12 @@ export class ColorsComponent implements OnInit {
   }
 
   handleChange($event: ColorEvent) {
-    console.log($event.color);
-    console.log($event.color.hex)
-    console.log($event.color.rgb)
+    // console.log($event.color);
+    // console.log($event.color.hex)
+    // console.log($event.color.rgb)
     let rgb = $event.color.rgb
     this.makeRGB = 'rgba('+rgb.r+','+rgb.g+','+rgb.b+','+rgb.a+')'
-    console.log(this.makeRGB)
+    // console.log(this.makeRGB)
     this.hexMessage = this.makeRGB//$event.color.hex
     this.hexMessageEvent.emit(this.hexMessage)
 

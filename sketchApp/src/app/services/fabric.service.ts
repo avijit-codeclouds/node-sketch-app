@@ -139,7 +139,7 @@ export class FabricService {
     }) as CustomFabricLine;
     line.id = uuid();
     canvas.add(line);
-    console.log(line)
+    // console.log(line)
     return line;
   }
 

@@ -23,8 +23,8 @@ export class AuthGuard implements CanActivate {
     // console.log(this.authService.isLoggedIn())
     
     const getUser = localStorage.getItem('user');
-    console.log(`getUser :: `);
-    console.log(getUser);
+    // console.log(`getUser :: `);
+    // console.log(getUser);
     if(getUser != null){
         // authorised so return true
         return true;

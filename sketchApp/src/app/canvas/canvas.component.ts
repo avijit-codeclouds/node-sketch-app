@@ -22,7 +22,7 @@ export class CanvasComponent implements OnInit {
 
     ngOnInit() {
       this.shapeService.canvasList().subscribe(res => {
-        console.log(res)
+        // console.log(res)
         if(res.success == true){
           this.canvasList = res.result
         }
@@ -31,7 +31,7 @@ export class CanvasComponent implements OnInit {
       })
       //shared with me canvas
       this.shapeService.sharedWithMeCanvas().subscribe(response => {
-        console.log(response)
+        // console.log(response)
         this.sharedCanvasList = response.result
       },err => {
         console.log(err)
