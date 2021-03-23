@@ -58,6 +58,7 @@ export class CanvasspecificComponent implements OnInit {
   form: FormGroup;
   hideBtnNow : boolean = true
   isSharedUser : boolean = false
+  getSharedIds = []
 
   constructor(
     private shapeService: ShapeService,
@@ -139,9 +140,10 @@ export class CanvasspecificComponent implements OnInit {
   shareCanvas(){
     console.log('share canvas...')
     // console.log(this.form.value.user_ids)
+    console.log(this.getSharedIds)
     let payload = {
       canvas_id : this.canvas_id,
-      user_ids : this.form.value.user_ids
+      user_ids : this.getSharedIds.concat(this.form.value.user_ids)//this.form.value.user_ids
     }
     this.shapeService.updateShareCanvas(payload).subscribe(result => {
       console.log(result)
@@ -157,6 +159,7 @@ export class CanvasspecificComponent implements OnInit {
   ngOnInit() {
     this.shapeService.getParticularCanvas(this.canvas_id).subscribe(res => {
       console.log(res)
+      this.getSharedIds = res.result.shared
       this.getNode = res.result.node
       this.shapeService.getAuthUserDetails().subscribe(data => {
         if(res.result.owner_id == data._id){
