@@ -1,6 +1,8 @@
 #canvas { 
     border: 1px solid #000;
     /* height: 400px; */
+    /* height: 100%;
+    width: 100%; */
 }
 
 .gallery{
