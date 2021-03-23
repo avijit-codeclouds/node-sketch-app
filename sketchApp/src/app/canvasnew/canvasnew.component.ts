@@ -8,6 +8,7 @@ import { subscribeOn } from 'rxjs/operators';
 import { fabric } from 'fabric';
 import { EventHandlerService } from '../services/event-handler.service';
 import { CustomFabricObject, DrawingTools, DrawingColours } from '../services/models';
+declare var $: any;
 
 @Component({
   selector: 'app-canvasnew',
@@ -42,6 +43,7 @@ export class CanvasnewComponent implements OnInit {
   color = ''
   modeType : string = 'brush';
   getJsonStage : any
+  getWindowWidth : Number
 
   constructor(
     private shapeService: ShapeService,
@@ -51,13 +53,15 @@ export class CanvasnewComponent implements OnInit {
     private fabricService: EventHandlerService
   ) { 
     this.btnStatus = true
+    this.getWindowWidth = window.innerWidth
   }
 
   ngOnInit() {
     let width = 1920//window.innerWidth * 0.9;
     let height = 350
-    console.log(window.innerWidth)
-    console.log(window.innerHeight)
+    // console.log(window.innerWidth)
+    // console.log(window.innerHeight)
+    
     if (this.eventHandler.canvas) {
       this.eventHandler.canvas.dispose();
     }
@@ -66,6 +70,7 @@ export class CanvasnewComponent implements OnInit {
       preserveObjectStacking: true,
       backgroundColor : '#ffffff'//"#f9f9f9"
     });
+    this.canvas.setDimensions({width:window.innerWidth, height:350});
     // this.canvas.backgroundColor="#808080";
     this.eventHandler.canvas = this.canvas;
     this.eventHandler.extendToObjectWithId();
@@ -84,80 +89,13 @@ export class CanvasnewComponent implements OnInit {
   }
 
 
-  saveDraw(){
-    console.log('draw image ...')
-    console.log(this.getRandomString(15))
-    console.log(`get draw string ::`)
-    console.log(this.canvas)
-    // if(this.getJsonStage != undefined){
-    //   console.log(this.getJsonStage)
-    //   //get owner details
-    //   this.shapeService.getAuthUserDetails().subscribe(res => {
-    //     console.log(res._id)
-    //     let payload = {
-    //       node : this.getJsonStage,
-    //       canvas_id : this.getRandomString(15),
-    //       owner_id : res._id
-    //     }
-    //     this.shapeService.saveDrawString(payload).subscribe(res => {
-    //       console.log(res)
-    //       console.log(res.result.canvas_id)
-    //       if(res.success == true){
-    //         this.router.navigateByUrl("/canvas/"+res.result._id);
-    //       }
-    //     },
-    //     err => {
-    //       console.log(err)
-    //     })
-    //   },err => {
-    //     console.log(err)
-    //   })
-    // }
-  }
 
   modeChange(mode : any){
     this.modeType = mode
-    console.log(`mode :: ${this.modeType}`)
+    // console.log(`mode :: ${this.modeType}`)
   }
 
-  // addLineListeners(color : any) {
-  //   const component = this;
-  //   let lastLine;
-  //   let isPaint;
-  //   this.stage.on('mousedown touchstart', function (e) {
-  //     if (!component.selectedButton['line'] && !component.erase) {
-  //       return;
-  //     }
-  //     isPaint = true;
-  //     const mode = component.erase ? 'erase' : 'brush';
-  //     var pos = component.stage.getPointerPosition();
-  //     lastLine = component.shapeService.line(pos, mode, color)
-  //     component.layer.add(lastLine);
-  //     component.shapes.push(lastLine);
-  //     // let jsonStage = component.stage.toJSON();
-  //     // console.log(`jsonStage ::`)
-  //     // console.log(jsonStage)
-  //   });
-  //   this.stage.on('mouseup touchend', function () {
-  //     isPaint = false;
-  //   });
-  //   // and core function - drawing
-  //   this.stage.on('mousemove touchmove', function () {
-  //     if (!isPaint) {
-  //       return;
-  //     }
-  //     const pos = component.stage.getPointerPosition();
-  //     var newPoints = lastLine.points().concat([pos.x, pos.y]);
-  //     lastLine.points(newPoints);
-  //     component.layer.batchDraw();
-  //     let jsonStage = component.stage.toJSON();
-  //     component.getJsonStage = jsonStage
-  //     component.disableSaveBtn = false
-  //     console.log(`jsonStage ::`)
-  //     console.log(jsonStage)
-  //   });
-  // }
-
+  
   receiveMessage($event,colour: any,tool : any = 'PENCIL') {
     this.hexMessage = $event
     this.color = this.hexMessage
@@ -168,8 +106,8 @@ export class CanvasnewComponent implements OnInit {
     this.selectedColour = this.fabricService.selectedColour;
     this.fabricService.selectedTool = tool;
     this.selected = this.fabricService.selectedTool;
-    console.log(this.hexMessage)
-    console.log(`color :: ${this.color}`)
+    // console.log(this.hexMessage)
+    // console.log(`color :: ${this.color}`)
   }
 
   private addEventListeners() {

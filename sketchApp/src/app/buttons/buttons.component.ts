@@ -45,7 +45,7 @@ export class ButtonsComponent implements OnInit {
     private _snackBar: MatSnackBar
   ) {
     this.selectedColour = fabricService.selectedColour;
-    console.log(this.activatedRoute.snapshot.params['canvas_id']);
+    // console.log(this.activatedRoute.snapshot.params['canvas_id']);
     if(this.activatedRoute.snapshot.params['canvas_id'] != undefined){
       // this.showSharebtn = true
       this.particularCanvasId = this.activatedRoute.snapshot.params['canvas_id']
@@ -66,10 +66,10 @@ export class ButtonsComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.btnStatus)
+    // console.log(this.btnStatus)
     if(this.activatedRoute.snapshot.params['canvas_id'] != undefined){
       this.shapeService.getParticularCanvas(this.particularCanvasId).subscribe(res => {
-        console.log(res)
+        // console.log(res)
         this.shapeService.getAuthUserDetails().subscribe(data => {
           if(res.result.owner_id == data._id){
             this.showSharebtn = true
@@ -102,20 +102,20 @@ export class ButtonsComponent implements OnInit {
   } 
 
   saveDraw(){
-    console.log(`update :: ${this.update}`)
-    console.log(`getCanvas_id :: ${this.getCanvas_id}`)
+    // console.log(`update :: ${this.update}`)
+    // console.log(`getCanvas_id :: ${this.getCanvas_id}`)
     if(this.update == false){
       if(this.resultCanvasJSON != undefined){
         this.shapeService.getAuthUserDetails().subscribe(res => {
-          console.log(res._id)
+          // console.log(res._id)
           let payload = {
             node : this.resultCanvasJSON,
             canvas_id : this.getRandomString(15),
             owner_id : res._id
           }
           this.shapeService.saveDrawString(payload).subscribe(res => {
-            console.log(res)
-            console.log(res.result.canvas_id)
+            // console.log(res)
+            // console.log(res.result.canvas_id)
             if(res.success == true){
               this.router.navigateByUrl("/canvas/"+res.result._id);
             }
@@ -130,19 +130,19 @@ export class ButtonsComponent implements OnInit {
     }else{
       if(this.resultCanvasJSON != undefined){
         this.shapeService.getAuthUserDetails().subscribe(res => {
-          console.log(this.isSharedUser)
+          // console.log(this.isSharedUser)
           if(this.isSharedUser == true){
             let payload
             this.shapeService.getParticularCanvas(this.getCanvas_id).subscribe(res => {
-              console.log(res.result.owner_id)
+              // console.log(res.result.owner_id)
               payload = {
                 node : this.resultCanvasJSON,
                 canvas_id : this.getCanvas_id,
                 owner_id : res.result.owner_id
               }
-              console.log(payload)
+              // console.log(payload)
               this.shapeService.updateCanvas(payload).subscribe(res => {
-                console.log(res)
+                // console.log(res)
                 this.openSnackBar('Updated')
                 this.msg = res.msg
                 this.enableMessage = true
@@ -165,9 +165,9 @@ export class ButtonsComponent implements OnInit {
               canvas_id : this.getCanvas_id,
               owner_id : res._id
             }
-            console.log(payload)
+            // console.log(payload)
             this.shapeService.updateCanvas(payload).subscribe(res => {
-              console.log(res)
+              // console.log(res)
               this.openSnackBar('Updated')
               this.msg = res.msg
               this.enableMessage = true

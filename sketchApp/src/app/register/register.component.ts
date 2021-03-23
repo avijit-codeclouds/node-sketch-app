@@ -46,18 +46,18 @@ export class RegisterComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    console.log(this.form.value)
+    // console.log(this.form.value)
     this.authService.register(this.form.value).subscribe(res => {
-      console.log(res)
+      // console.log(res)
       if(res.errors){
-        console.log(res.errors[0].msg)
+        // console.log(res.errors[0].msg)
         this.msg = res.errors[0].msg
         this.enableMessage = true
         this.className = 'alert-danger'
         setTimeout( ()=>{
-          console.log('works')
+          // console.log('works')
           this.enableMessage = false
-          console.log(`enableMessage :: ${this.enableMessage}`)
+          // console.log(`enableMessage :: ${this.enableMessage}`)
         }, 5000)
       }else{
         this.msg = 'Successfully registered!'
@@ -66,9 +66,9 @@ export class RegisterComponent implements OnInit {
         // this.form.controls['name'].setValue('');
         // this.form.reset()
         setTimeout( ()=>{
-          console.log('works')
+          // console.log('works')
           this.enableMessage = false
-          console.log(`enableMessage :: ${this.enableMessage}`)
+          // console.log(`enableMessage :: ${this.enableMessage}`)
           this.router.navigate(['/']);
         }, 5000)
         

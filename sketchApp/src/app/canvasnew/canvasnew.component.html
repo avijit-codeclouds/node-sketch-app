@@ -3,5 +3,6 @@
     <!-- <app-colors></app-colors> -->
     <app-colors (hexMessageEvent)="receiveMessage($event,'')"></app-colors>
     <!-- <div id="canvas"></div> -->
-    <canvas id="canvas" width="1920" height="350" style="border:1px solid #000000;"></canvas>
+    <canvas id="canvas" width="{{getWindowWidth}}" height="350" style="border:1px solid #000000;"></canvas>
+
   </div>

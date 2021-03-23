@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     private matDialog: MatDialog
   ) { 
     this.authService.user.subscribe(x => this.user = x);
-    console.log(this.user)
+    // console.log(this.user)
     // if(localStorage.getItem("user")!=null){
     //   this.loggedIn = true
     // }
